@@ -3,19 +3,26 @@
     <the-centered-flex>
       <div class="container-login">
         <label for="">Login</label>
-        <input class="input" type="text" />
+        <input ref="login" class="input" type="text" />
         <label for="">Password</label>
         <input type="password" class="input" />
-        <button class="button">Login</button>
+        <button @click="setCurrentUser($refs.login.value); log()" class="button">Login</button>
       </div>
     </the-centered-flex>
   </div>
 </template>
 
 <script>
-import TheCenteredFlex from '../shared/TheCenteredFlex.vue'
+import TheCenteredFlex from "../shared/TheCenteredFlex.vue"
 export default {
-  components: { TheCenteredFlex },}
+  inject: ['setCurrentUser', 'currentUser'],
+  components: { TheCenteredFlex },
+  methods: {
+    log() {
+      console.log(this.currentUser.value)
+    }
+  }
+}
 </script>
 
 <style>
