@@ -6,11 +6,34 @@
 
 <script>
 //import ChatPage from "./components/chat/ChatPage.vue";
+import { computed } from 'vue'
 
 export default {
   name: "App",
-  components: {
+  data() { 
+    return {
+      currentUser: { 
+        login: '', 
+        status: 'online'
+      }
+    }
   },
+  methods: {
+    setCurrentUser(login) {
+      this.currentUser = {
+        login: login,
+        status: 'offline'
+      }
+
+      this.$router.push('/chat')
+    }
+  },
+  provide() {
+    return { 
+      currentUser: computed(() => this.currentUser),
+      setCurrentUser: this.setCurrentUser
+    }
+  }
 };
 </script>
 
@@ -85,5 +108,13 @@ export default {
   height: 40px;
   border-radius: 5px;
   box-sizing: border-box;
+}
+
+.flex-end-5 {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  gap: 5px;
 }
 </style>
