@@ -53,10 +53,10 @@
 </template>
 
 <script>
-import ChatItem from "./ChatItem.vue";
-import TheCenteredFlex from "../shared/TheCenteredFlex.vue";
-import MessageItem from "./MessageItem.vue";
-import TheChatHeader from "./TheChatHeader.vue";
+import ChatItem from "./ChatItem.vue"
+import TheCenteredFlex from "../shared/TheCenteredFlex.vue"
+import MessageItem from "./MessageItem.vue"
+import TheChatHeader from "./TheChatHeader.vue"
 
 export default {
   name: "ChatPage",
@@ -91,46 +91,46 @@ export default {
       currentUser: "Vlad",
       searchInput: "",
       selectedChat: null,
-    };
+    }
   },
   methods: {
     sendMessage() {
-      const today = new Date();
-      const hours = today.getHours();
-      const minutes = today.getMinutes();
-      const date = `${hours}:${minutes}`;
+      const today = new Date()
+      const hours = today.getHours()
+      const minutes = today.getMinutes()
+      const date = `${hours}:${minutes}`
 
       const message = {
         text: this.inputMessage,
         author: "Vlad",
         isEdited: false,
         time: date,
-      };
+      }
 
-      this.inputMessage = "";
-      this.messages.push(message);
+      this.inputMessage = ""
+      this.messages.push(message)
       const height = this.$refs.chat.scrollHeight
-      this.$refs.chat.scrollTop = height 
+      this.$refs.chat.scrollTop = height
     },
     isMyMessage(author) {
-      return author === this.currentUser;
+      return author === this.currentUser
     },
     getChatsList() {
-      let regex = new RegExp(this.searchInput, "i");
+      let regex = new RegExp(this.searchInput, "i")
 
-      return this.chats.filter((i) => i.user.name.match(regex));
+      return this.chats.filter((i) => i.user.name.match(regex))
     },
     selectChat(chatId) {
-      this.selectedChat = this.chats.find((c) => c.id == chatId);
+      this.selectedChat = this.chats.find((c) => c.id == chatId)
     },
   },
   provide() {
     return {
       selectChat: this.selectChat,
       selectedChat: this.selectedChat,
-    };
+    }
   },
-};
+}
 </script>
 
 <style scoped>
