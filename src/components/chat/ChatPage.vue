@@ -134,10 +134,6 @@ export default {
 </script>
 
 <style scoped>
-.input:focus {
-  outline: none;
-}
-
 .container-main {
   display: grid;
   grid-auto-columns: auto;

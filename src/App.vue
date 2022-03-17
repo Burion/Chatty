@@ -108,6 +108,11 @@ export default {
   height: 40px;
   border-radius: 5px;
   box-sizing: border-box;
+  text-indent: 5px;
+}
+
+.input:focus {
+  outline: none;
 }
 
 .flex-end-5 {
