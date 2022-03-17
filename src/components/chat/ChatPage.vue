@@ -36,35 +36,7 @@
           You haven't had conversation with this user before
         </the-centered-flex>
         <div v-else class="chat-canvas">
-          <div
-            v-for="message in messages"
-            :key="message"
-            class="container-message"
-            :class="{
-              others: !isMyMessage(message.author),
-              own: isMyMessage(message.author),
-            }"
-          >
-            <div
-              v-show="!isMyMessage(message.author)"
-              class="circle-img-size-1"
-            ></div>
-            <div class="message-bubble">
-              <div class="grid-auto-rows-5">
-                {{ message.text }}
-                <div class="flex-end-5">
-                  <div v-if="message.isEdited" class="text-small">Edited</div>
-                  <div class="text-small">
-                    {{ message.time }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div
-              v-show="isMyMessage(message.author)"
-              class="circle-img-size-1"
-            ></div>
-          </div>
+          <message-item v-for="message in messages" :key="message" :message="message" :isMyMessage="isMyMessage"></message-item>
         </div>
       </div>
       <div class="container-input-comment">
@@ -83,12 +55,14 @@
 <script>
 import ChatItem from "./ChatItem.vue";
 import TheCenteredFlex from "../shared/TheCenteredFlex.vue"
+import MessageItem from './MessageItem.vue';
 
 export default {
   name: "ChatPage",
   components: {
     ChatItem,
-    TheCenteredFlex
+    TheCenteredFlex,
+    MessageItem
   },
   data() {
     return {
@@ -259,23 +233,6 @@ export default {
   overflow-y: scroll;
 }
 
-.container-message {
-  height: auto;
-  gap: 10px;
-  margin: 0 5px 0 5px;
-}
-
-.others {
-  display: flex;
-  justify-content: start;
-}
-
-.own {
-  display: flex;
-  flex-direction: row;
-  justify-content: end;
-}
-
 .text-regular {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: rgb(70, 70, 70);
@@ -291,16 +248,6 @@ export default {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: rgb(70, 70, 70);
   font-size: 10pt;
-}
-
-.message-bubble {
-  background-color: rgb(199, 199, 255);
-  border-radius: 10px;
-  width: auto;
-  max-width: 50%;
-  height: auto;
-  padding: 10px;
-  box-shadow: 2px 2px 5px rgba(128, 128, 128, 0.26);
 }
 
 .chat-canvas::-webkit-scrollbar {
