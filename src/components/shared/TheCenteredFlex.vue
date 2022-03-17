@@ -1,8 +1,6 @@
 <template>
   <div class="container-flex-center">
-    <div class="chat-last-message">
-      <slot></slot>
-    </div>
+    <slot></slot>
   </div>
 </template>
 
