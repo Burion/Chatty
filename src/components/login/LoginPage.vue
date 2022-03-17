@@ -6,7 +6,7 @@
         <input ref="login" class="input" type="text" />
         <label for="">Password</label>
         <input type="password" class="input" />
-        <button @click="setCurrentUser($refs.login.value); log()" class="button">Login</button>
+        <button @click="setCurrentUser($refs.login.value)" class="button">Login</button>
       </div>
     </the-centered-flex>
   </div>
@@ -16,12 +16,7 @@
 import TheCenteredFlex from "../shared/TheCenteredFlex.vue"
 export default {
   inject: ['setCurrentUser', 'currentUser'],
-  components: { TheCenteredFlex },
-  methods: {
-    log() {
-      console.log(this.currentUser.value)
-    }
-  }
+  components: { TheCenteredFlex }
 }
 </script>
 
