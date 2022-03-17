@@ -134,19 +134,6 @@ export default {
 </script>
 
 <style scoped>
-.input {
-  /* margin: 0 10px; */
-  /* padding: 0 5px; */
-  border: solid 1px rgb(185, 185, 185);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 12pt;
-  display: block;
-  width: 100%;
-  height: 40px;
-  border-radius: 5px;
-  box-sizing: border-box;
-}
-
 .input:focus {
   outline: none;
 }
@@ -286,24 +273,6 @@ export default {
   text-align: center;
   text-align: left;
   margin: 0;
-}
-
-.button {
-  border-radius: 5px;
-  margin: 0;
-  background-color: transparent;
-  border: none;
-  outline: 1px solid rgb(162, 162, 238);
-  width: 100%;
-  height: 40px;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 12pt;
-}
-
-.button:hover {
-  background-color: rgb(162, 162, 238);
-  color: white;
-  cursor: pointer;
 }
 
 .container-input-comment {
