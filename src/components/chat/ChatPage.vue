@@ -15,7 +15,7 @@
           v-for="chat in getChatsList()"
           :key="chat"
           :chat="chat"
-          :isSelected="chat.id == selectedChat"
+          :isSelected="selectedChat ? chat.id == selectedChat.id : false"
         >
         </chat-item>
       </div>
@@ -25,13 +25,7 @@
         Select chat to start conversation
       </the-centered-flex>
       <div v-else ref="chatCanvas" class="container-header-canvas">
-        <div class="chat-header">
-          <div class="circle-img-size-1"></div>
-          <div class="grid-auto-rows-0">
-            <div class="chat-name">Vlad Buriak</div>
-            <div class="text-semi-small">online</div>
-          </div>
-        </div>
+        <the-chat-header :user="selectedChat.user"></the-chat-header>
         <the-centered-flex v-if="messages.length == 0">
           You haven't had conversation with this user before
         </the-centered-flex>
@@ -56,13 +50,15 @@
 import ChatItem from "./ChatItem.vue";
 import TheCenteredFlex from "../shared/TheCenteredFlex.vue"
 import MessageItem from './MessageItem.vue';
+import TheChatHeader from './TheChatHeader.vue'
 
 export default {
   name: "ChatPage",
   components: {
     ChatItem,
     TheCenteredFlex,
-    MessageItem
+    MessageItem,
+    TheChatHeader
   },
   data() {
     return {
@@ -71,12 +67,18 @@ export default {
       chats: [
         {
           id: 123,
-          name: "Vlad",
+          user: {
+            name: 'Vlad', 
+            status: 'online'
+          },
           lastMessage: "I wanted to tell you about everything",
         },
         {
           id: 1234,
-          name: "Vlad",
+          user: {
+            name: 'Oleh', 
+            status: 'not in place'
+          },
           lastMessage: "I wanted to tell you about everything",
         },
       ],
@@ -109,11 +111,10 @@ export default {
     getChatsList() {
       let regex = new RegExp(this.searchInput, "i");
 
-      return this.chats.filter((i) => i.name.match(regex));
+      return this.chats.filter((i) => i.user.name.match(regex));
     },
     selectChat(chatId) {
-      this.selectedChat = chatId;
-      console.log(this.selectedChat);
+      this.selectedChat = this.chats.find(c => c.id == chatId);
     },
   },
   provide() {

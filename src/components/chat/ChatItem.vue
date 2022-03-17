@@ -4,7 +4,7 @@
       <div class="circle-img-size-2"></div>
       <div class="container-chat-item-text">
         <div class="chat-name">
-          {{ chat.name }}
+          {{ chat.user.name }}
         </div>
         <div class="chat-last-message">
           {{ chat.lastMessage }}
