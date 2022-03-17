@@ -88,7 +88,6 @@ export default {
           lastMessage: "I wanted to tell you about everything",
         },
       ],
-      currentUser: "Vlad",
       searchInput: "",
       selectedChat: null,
     }
@@ -113,7 +112,7 @@ export default {
       this.$refs.chat.scrollTop = height
     },
     isMyMessage(author) {
-      return author === this.currentUser
+      return author === this.currentUser.value.login
     },
     getChatsList() {
       let regex = new RegExp(this.searchInput, "i")
@@ -130,6 +129,7 @@ export default {
       selectedChat: this.selectedChat,
     }
   },
+  inject: ['currentUser']
 }
 </script>
 
@@ -311,13 +311,5 @@ export default {
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: auto;
-}
-
-.flex-end-5 {
-  display: flex;
-  flex-direction: row;
-  justify-content: end;
-  align-items: center;
-  gap: 5px;
 }
 </style>
