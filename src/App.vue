@@ -1,16 +1,15 @@
 <template>
   <div class="container">
-    <chat-page></chat-page>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import ChatPage from "./components/chat/ChatPage.vue";
+//import ChatPage from "./components/chat/ChatPage.vue";
 
 export default {
   name: "App",
   components: {
-    ChatPage,
   },
 };
 </script>
