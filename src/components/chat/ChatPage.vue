@@ -24,12 +24,12 @@
       <the-centered-flex v-if="!selectedChat">
         Select chat to start conversation
       </the-centered-flex>
-      <div v-else ref="chatCanvas" class="container-header-canvas">
+      <div v-else class="container-header-canvas">
         <the-chat-header :user="selectedChat.user"></the-chat-header>
         <the-centered-flex v-if="messages.length == 0">
           You haven't had conversation with this user before
         </the-centered-flex>
-        <div v-else class="chat-canvas">
+        <div v-show="messages.length != 0" class="chat-canvas" ref="chat">
           <message-item
             v-for="message in messages"
             :key="message"
@@ -40,6 +40,7 @@
       </div>
       <div class="container-input-comment">
         <input
+          ref="input"
           v-model="inputMessage"
           @keydown.enter="sendMessage"
           type="text"
@@ -108,7 +109,8 @@ export default {
 
       this.inputMessage = "";
       this.messages.push(message);
-      // this.$refs.chatCanvas.scrollTop = 0
+      const height = this.$refs.chat.scrollHeight
+      this.$refs.chat.scrollTop = height 
     },
     isMyMessage(author) {
       return author === this.currentUser;
