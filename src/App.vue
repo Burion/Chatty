@@ -13,7 +13,9 @@ export default {
   data() { 
     return {
       currentUser: { 
-        login: '', 
+        login: '',
+        name: 'Vlad Buriak',
+        password: '123456768', 
         status: 'online'
       }
     }
@@ -95,6 +97,24 @@ export default {
 
 .button:hover {
   background-color: rgb(162, 162, 238);
+  color: white;
+  cursor: pointer;
+}
+
+.button-gray {
+  border-radius: 5px;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+  outline: 1px solid #ccc;
+  width: 100%;
+  height: 40px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 12pt;
+}
+
+.button-gray:hover {
+  background-color: #ccc;
   color: white;
   cursor: pointer;
 }
