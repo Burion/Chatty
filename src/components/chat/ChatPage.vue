@@ -30,7 +30,12 @@
           You haven't had conversation with this user before
         </the-centered-flex>
         <div v-else class="chat-canvas">
-          <message-item v-for="message in messages" :key="message" :message="message" :isMyMessage="isMyMessage"></message-item>
+          <message-item
+            v-for="message in messages"
+            :key="message"
+            :message="message"
+            :isMyMessage="isMyMessage"
+          ></message-item>
         </div>
       </div>
       <div class="container-input-comment">
@@ -48,9 +53,9 @@
 
 <script>
 import ChatItem from "./ChatItem.vue";
-import TheCenteredFlex from "../shared/TheCenteredFlex.vue"
-import MessageItem from './MessageItem.vue';
-import TheChatHeader from './TheChatHeader.vue'
+import TheCenteredFlex from "../shared/TheCenteredFlex.vue";
+import MessageItem from "./MessageItem.vue";
+import TheChatHeader from "./TheChatHeader.vue";
 
 export default {
   name: "ChatPage",
@@ -58,7 +63,7 @@ export default {
     ChatItem,
     TheCenteredFlex,
     MessageItem,
-    TheChatHeader
+    TheChatHeader,
   },
   data() {
     return {
@@ -68,16 +73,16 @@ export default {
         {
           id: 123,
           user: {
-            name: 'Vlad', 
-            status: 'online'
+            name: "Vlad",
+            status: "online",
           },
           lastMessage: "I wanted to tell you about everything",
         },
         {
           id: 1234,
           user: {
-            name: 'Oleh', 
-            status: 'not in place'
+            name: "Oleh",
+            status: "not in place",
           },
           lastMessage: "I wanted to tell you about everything",
         },
@@ -114,7 +119,7 @@ export default {
       return this.chats.filter((i) => i.user.name.match(regex));
     },
     selectChat(chatId) {
-      this.selectedChat = this.chats.find(c => c.id == chatId);
+      this.selectedChat = this.chats.find((c) => c.id == chatId);
     },
   },
   provide() {
