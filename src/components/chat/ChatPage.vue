@@ -19,6 +19,9 @@
         >
         </chat-item>
       </div>
+      <router-link to="/settings">
+        <button class="button-gray">Settings</button>
+      </router-link>
     </div>
     <div class="container-chat-controls">
       <the-centered-flex v-if="!selectedChat">
@@ -168,8 +171,9 @@ export default {
 }
 
 .container-list-chats {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr 40px;
   gap: 10px;
 }
 
@@ -273,6 +277,7 @@ export default {
 
 .container-input-comment {
   display: grid;
+  align-content: flex-end;
   grid-template-columns: 0.9fr 0.1fr;
   grid-auto-rows: auto;
   gap: 10px;
