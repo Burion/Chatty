@@ -28,7 +28,7 @@
         Select chat to start conversation
       </the-centered-flex>
       <div v-else class="container-header-canvas">
-        <the-chat-header :user="selectedChat.user"></the-chat-header>
+        <the-chat-header :chat="selectedChat"></the-chat-header>
         <the-centered-flex v-if="messages.length == 0">
           You haven't had conversation with this user before
         </the-centered-flex>
@@ -60,6 +60,7 @@ import ChatItem from "./ChatItem.vue"
 import TheCenteredFlex from "../shared/TheCenteredFlex.vue"
 import MessageItem from "./MessageItem.vue"
 import TheChatHeader from "./TheChatHeader.vue"
+import axios from 'axios'
 
 export default {
   name: "ChatPage",
@@ -73,27 +74,15 @@ export default {
     return {
       inputMessage: "",
       messages: [],
-      chats: [
-        {
-          id: 123,
-          user: {
-            name: "Vlad",
-            status: "online",
-          },
-          lastMessage: "I wanted to tell you about everything",
-        },
-        {
-          id: 1234,
-          user: {
-            name: "Oleh",
-            status: "not in place",
-          },
-          lastMessage: "I wanted to tell you about everything",
-        },
-      ],
+      chats: [],
       searchInput: "",
       selectedChat: null,
     }
+  },
+  mounted() {
+    axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*'
+    console.log(this.currentUser.value.login)
+    axios.get(`https://localhost:5001/api/v2/chats/${this.currentUser.value.login}`).then(response => { this.chats = response.data })
   },
   methods: {
     sendMessage() {
@@ -104,7 +93,7 @@ export default {
 
       const message = {
         text: this.inputMessage,
-        author: "Vlad",
+        author: this.currentUser.value.login,
         isEdited: false,
         time: date,
       }
@@ -120,10 +109,12 @@ export default {
     getChatsList() {
       let regex = new RegExp(this.searchInput, "i")
 
-      return this.chats.filter((i) => i.user.name.match(regex))
+      return this.chats.filter((i) => i.name.match(regex))
     },
     selectChat(chatId) {
-      this.selectedChat = this.chats.find((c) => c.id == chatId)
+      this.selectedChat = this.chats.find((c) => c.name == chatId)
+      
+      axios.get(`https://localhost:5001/api/messages/`, { params: { firstUserId: this.currentUser.value.login, secondUserId: this.selectedChat.name } }).then(response => this.messages = response.data)
     },
   },
   provide() {
