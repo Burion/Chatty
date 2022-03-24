@@ -5,8 +5,8 @@
         <label for="">Login</label>
         <input ref="login" class="input" type="text" />
         <label for="">Password</label>
-        <input type="password" class="input" />
-        <button @click="setCurrentUser($refs.login.value)" class="button">Login</button>
+        <input ref="password" type="password" class="input" />
+        <button @click="login($refs.login.value, $refs.password.value)" class="button">Login</button>
       </div>
     </the-centered-flex>
   </div>
@@ -14,9 +14,17 @@
 
 <script>
 import TheCenteredFlex from "../shared/TheCenteredFlex.vue"
+import axios from "axios"
+
 export default {
   inject: ['setCurrentUser', 'currentUser'],
-  components: { TheCenteredFlex }
+  components: { TheCenteredFlex },
+  methods: {
+    login(login, password) {
+      axios.post("https://localhost:5001/api/v1/auth/login", { login: login, password: password })
+        .then(response => { console.log(response); document.cookie = "jwt=" + response.data.acess_Token; this.$router.push("/chat") })
+    }
+  }
 }
 </script>
 
