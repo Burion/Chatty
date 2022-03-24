@@ -1,13 +1,13 @@
 <template>
   <div class="chat-item" :class="{ 'chat-item-selected': isSelected }">
-    <div @click="selectChat(chat.id)" class="container-chat-item">
+    <div @click="selectChat(chat.name)" class="container-chat-item">
       <div class="circle-img-size-2"></div>
       <div class="container-chat-item-text">
         <div class="chat-name">
-          {{ chat.user.name }}
+          {{ chat.name }}
         </div>
         <div class="chat-last-message">
-          {{ chat.lastMessage }}
+          {{ chat.lastMessage.text }}
         </div>
       </div>
     </div>
