@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router"
 import LoginPage from "./components/login/LoginPage.vue"
 import ChatPage from "./components/chat/ChatPage.vue"
 import SettingsPage from "./components/settings/SettingsPage.vue"
+import RegisterPage from "./components/login/RegisterPage.vue"
 import App from "./App.vue"
 
 const router = createRouter({
@@ -10,7 +11,8 @@ const router = createRouter({
   routes: [
     { path: "/login", component: LoginPage },
     { path: "/chat", component: ChatPage },
-    { path: "/settings", component: SettingsPage }
+    { path: "/settings", component: SettingsPage }, 
+    { path: "/register", component: RegisterPage }
   ]
 })
 
