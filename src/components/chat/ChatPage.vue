@@ -102,9 +102,6 @@ export default {
     }
   },
   mounted() {
-    axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*'
-    axios.defaults.headers.get['Authoriztion'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidmxhZG9zIiwibmJmIjoiMTY1MzExOTQ5MSIsImV4cCI6IjE2NTMyOTIyOTEifQ.SZandYqDgL3gsGjNyWCVgbe8LmMLegWtmfcpy_C4Lk8'
-    console.log(this.currentUser.value.login)
     axios.get(`https://localhost:5001/api/v1/chats/vlad`, { 
       headers: { 
         authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidmxhZG9zIiwibmJmIjoiMTY1MzExOTQ5MSIsImV4cCI6IjE2NTMyOTIyOTEifQ.SZandYqDgL3gsGjNyWCVgbe8LmMLegWtmfcpy_C4Lk8" 
@@ -130,8 +127,6 @@ export default {
       const height = this.$refs.chat.scrollHeight
       this.$refs.chat.scrollTop = height
       
-      axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*'
-      axios.defaults.headers.get['Authoriztion'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidmxhZG9zIiwibmJmIjoiMTY1MzExOTQ5MSIsImV4cCI6IjE2NTMyOTIyOTEifQ.SZandYqDgL3gsGjNyWCVgbe8LmMLegWtmfcpy_C4Lk8'
       axios.post(`https://localhost:5001/api/v1/messages/`, message, { headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidmxhZG9zIiwibmJmIjoiMTY1MzExOTQ5MSIsImV4cCI6IjE2NTMyOTIyOTEifQ.SZandYqDgL3gsGjNyWCVgbe8LmMLegWtmfcpy_C4Lk8" }})
     },
     isMyMessage(author) {
@@ -162,17 +157,14 @@ export default {
       }
       else
       {
-        //let regex = new RegExp(this.searchInput, "i")
-        return this.chats 
+        let regex = new RegExp(this.searchInput, "i")
 
-        //return this.chats.filter((i) => i.name.match(regex))
+        return this.chats.filter((i) => i.name.match(regex))
       }
 
     },
     selectChat(login) {
       this.selectedChat = this.chats.find((c) => c.userLogin == login)
-      
-      console.log(this.selectedChat.userLogin)
 
       axios.get(`https://localhost:5001/api/v1/messages/${login}`).then(response => this.messages = response.data)
     }, 
