@@ -2,11 +2,11 @@
   <div
     class="container-message"
     :class="{
-      others: !isMyMessage(message.author),
-      own: isMyMessage(message.author),
+      others: !isMyMessage(message.authorId),
+      own: isMyMessage(message.authorId),
     }"
   >
-    <div v-show="!isMyMessage(message.author)" class="circle-img-size-1"></div>
+    <div v-show="!isMyMessage(message.authorId)" class="circle-img-size-1"></div>
     <div class="message-bubble">
       <div class="grid-auto-rows-5">
         {{ message.text }}
@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    <div v-show="isMyMessage(message.author)" class="circle-img-size-1"></div>
+    <div v-show="isMyMessage(message.authorId)" class="circle-img-size-1"></div>
   </div>
 </template>
 

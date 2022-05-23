@@ -5,19 +5,39 @@
         type="text"
         v-model="searchInput"
         class="input"
+        @keydown.enter="searchUsers"
         placeholder="@ + user name to search among all users"
       />
-      <div v-if="getChatsList().length == 0" class="container-flex-center">
-        <div class="chat-last-message">We couldn't find contacts</div>
+      <div v-if="!searchInput.startsWith('@')">
+        <div v-if="getChatsList().length == 0" class="container-flex-center">
+          <div class="chat-last-message">We couldn't find contacts</div>
+        </div>
+        <div v-else class="list-chats">
+          <chat-item
+            v-for="chat in chats"
+            :key="chat.userLogin"
+            :chat="chat"
+            :isSelected="selectedChat ? chat.userLogin == selectedChat.userLogin : false"
+          >
+          </chat-item>
+        </div>
       </div>
-      <div v-else class="list-chats">
-        <chat-item
-          v-for="chat in getChatsList()"
-          :key="chat"
-          :chat="chat"
-          :isSelected="selectedChat ? chat.id == selectedChat.id : false"
-        >
-        </chat-item>
+      <div v-else>
+        <div v-if="loadingUsersSearch" class="container-flex-center">
+          <div class="loader"></div>
+        </div>
+        <div v-else-if="searchedUsers.length > 0" class="list-chats">
+          <chat-item
+            v-for="chat in searchedUsers"
+            :key="chat"
+            :chat="chat"
+            :isSelected="selectedChat ? chat.userLogin == selectedChat.userLogin : false"
+          >
+          </chat-item>
+        </div>
+        <div v-else class="container-flex-center">
+          <div class="chat-last-message">No results</div>
+        </div>
       </div>
       <router-link to="/settings">
         <button class="button-gray">Settings</button>
@@ -77,12 +97,19 @@ export default {
       chats: [],
       searchInput: "",
       selectedChat: null,
+      searchedUsers: [],
+      loadingUsersSearch: false
     }
   },
   mounted() {
     axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*'
+    axios.defaults.headers.get['Authoriztion'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidmxhZG9zIiwibmJmIjoiMTY1MzExOTQ5MSIsImV4cCI6IjE2NTMyOTIyOTEifQ.SZandYqDgL3gsGjNyWCVgbe8LmMLegWtmfcpy_C4Lk8'
     console.log(this.currentUser.value.login)
-    axios.get(`https://localhost:5001/api/v2/chats/${this.currentUser.value.login}`).then(response => { this.chats = response.data })
+    axios.get(`https://localhost:5001/api/v1/chats/vlad`, { 
+      headers: { 
+        authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidmxhZG9zIiwibmJmIjoiMTY1MzExOTQ5MSIsImV4cCI6IjE2NTMyOTIyOTEifQ.SZandYqDgL3gsGjNyWCVgbe8LmMLegWtmfcpy_C4Lk8" 
+      }})
+      .then(response => { this.chats = response.data.data })
   },
   methods: {
     sendMessage() {
@@ -102,25 +129,64 @@ export default {
       this.messages.push(message)
       const height = this.$refs.chat.scrollHeight
       this.$refs.chat.scrollTop = height
+      
+      axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*'
+      axios.defaults.headers.get['Authoriztion'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidmxhZG9zIiwibmJmIjoiMTY1MzExOTQ5MSIsImV4cCI6IjE2NTMyOTIyOTEifQ.SZandYqDgL3gsGjNyWCVgbe8LmMLegWtmfcpy_C4Lk8'
+      axios.post(`https://localhost:5001/api/v1/messages/`, message, { headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidmxhZG9zIiwibmJmIjoiMTY1MzExOTQ5MSIsImV4cCI6IjE2NTMyOTIyOTEifQ.SZandYqDgL3gsGjNyWCVgbe8LmMLegWtmfcpy_C4Lk8" }})
     },
     isMyMessage(author) {
       return author === this.currentUser.value.login
     },
-    getChatsList() {
-      let regex = new RegExp(this.searchInput, "i")
+    searchUsers()
+    {
+      if (this.searchInput.startsWith('@')) {
+        this.loadingUsersSearch = true
 
-      return this.chats.filter((i) => i.name.match(regex))
+        axios.get(`https://localhost:5001/api/v1/chats/`, { 
+          params: { 
+            searchQuery: this.searchInput.substring(1, this.searchInput.length - 1)
+          }})
+          .then(response => {
+            this.loadingUsersSearch = false
+            
+            if (response.data.message != 'Error') {
+              this.searchedUsers = response.data.data
+            }
+          })
+      }
     },
-    selectChat(chatId) {
-      this.selectedChat = this.chats.find((c) => c.name == chatId)
+    getChatsList() {
+      if (this.searchInput.startsWith('@'))
+      {
+        return
+      }
+      else
+      {
+        //let regex = new RegExp(this.searchInput, "i")
+        return this.chats 
+
+        //return this.chats.filter((i) => i.name.match(regex))
+      }
+
+    },
+    selectChat(login) {
+      this.selectedChat = this.chats.find((c) => c.userLogin == login)
       
-      axios.get(`https://localhost:5001/api/messages/`, { params: { firstUserId: this.currentUser.value.login, secondUserId: this.selectedChat.name } }).then(response => this.messages = response.data)
-    },
+      console.log(this.selectedChat.userLogin)
+
+      axios.get(`https://localhost:5001/api/v1/messages/${login}`).then(response => this.messages = response.data)
+    }, 
+    selectSearchedUser(login) {
+      this.selectedChat = this.searchedUsers.find(c => c.userLogin == login)
+
+      axios.get(`https://localhost:5001/api/v1/messages/${login}`).then(response => this.messages = response.data.data)
+    }
   },
   provide() {
     return {
       selectChat: this.selectChat,
       selectedChat: this.selectedChat,
+      selectSearchedUser: this.selectSearchedUser
     }
   },
   inject: ['currentUser']
@@ -169,6 +235,16 @@ export default {
 }
 
 .list-chats {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: 80px;
+  height: 100%;
+  gap: 10px;
+  /* overflow-y: auto; */
+  width: 100%;
+}
+
+.list-user-search {
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: 80px;
@@ -303,5 +379,19 @@ export default {
   display: grid;
   grid-template-columns: auto;
   grid-template-rows: auto;
+}
+
+.loader {
+  border: 8px solid #f3f3f3; /* Light grey */
+  border-top: 8px solid rgb(199, 199, 255);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

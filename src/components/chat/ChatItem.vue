@@ -1,13 +1,13 @@
 <template>
   <div class="chat-item" :class="{ 'chat-item-selected': isSelected }">
-    <div @click="selectChat(chat.name)" class="container-chat-item">
+    <div @click="selectSearchedUser(chat.userLogin)" class="container-chat-item">
       <div class="circle-img-size-2"></div>
       <div class="container-chat-item-text">
         <div class="chat-name">
           {{ chat.name }}
         </div>
         <div class="chat-last-message">
-          {{ chat.lastMessage.text }}
+          {{ chat.lastMessage ? chats.lastMessage.text : ''  }}
         </div>
       </div>
     </div>
@@ -19,7 +19,7 @@ export default {
   props: ["chat", "isSelected"],
   data() {},
   methods: {},
-  inject: ["selectChat", "selectedChat"],
+  inject: ["selectChat", "selectedChat", "selectSearchedUser"],
 };
 </script>
 

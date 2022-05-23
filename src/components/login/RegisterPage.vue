@@ -22,7 +22,7 @@ export default {
   methods: {
     registerUser(login, password) {
       axios.post('https://localhost:5001/api/v1/auth/', { login: login, password: password })
-        .then(response => { this.$router.push("/chat") })
+        .then(() => { this.$router.push("/chat") })
         .catch(err => console.error(err.message))
     }
   }
