@@ -127,7 +127,12 @@ export default {
       const height = this.$refs.chat.scrollHeight
       this.$refs.chat.scrollTop = height
       
-      axios.post(`https://localhost:5001/api/v1/messages/`, message, { headers: { authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidmxhZG9zIiwibmJmIjoiMTY1MzExOTQ5MSIsImV4cCI6IjE2NTMyOTIyOTEifQ.SZandYqDgL3gsGjNyWCVgbe8LmMLegWtmfcpy_C4Lk8" }})
+      axios.post(`https://localhost:5001/api/v1/messages/`, 
+        message, { 
+          headers: { 
+            authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidmxhZG9zIiwibmJmIjoiMTY1MzExOTQ5MSIsImV4cCI6IjE2NTMyOTIyOTEifQ.SZandYqDgL3gsGjNyWCVgbe8LmMLegWtmfcpy_C4Lk8" 
+          }
+        })
     },
     isMyMessage(author) {
       return author === this.currentUser.value.login
@@ -151,12 +156,10 @@ export default {
       }
     },
     getChatsList() {
-      if (this.searchInput.startsWith('@'))
-      {
+      if (this.searchInput.startsWith('@')) {
         return
       }
-      else
-      {
+      else {
         let regex = new RegExp(this.searchInput, "i")
 
         return this.chats.filter((i) => i.name.match(regex))
@@ -166,12 +169,14 @@ export default {
     selectChat(login) {
       this.selectedChat = this.chats.find((c) => c.userLogin == login)
 
-      axios.get(`https://localhost:5001/api/v1/messages/${login}`).then(response => this.messages = response.data)
+      axios.get(`https://localhost:5001/api/v1/messages/${login}`)
+        .then(response => this.messages = response.data)
     }, 
     selectSearchedUser(login) {
       this.selectedChat = this.searchedUsers.find(c => c.userLogin == login)
 
-      axios.get(`https://localhost:5001/api/v1/messages/${login}`).then(response => this.messages = response.data.data)
+      axios.get(`https://localhost:5001/api/v1/messages/${login}`)
+        .then(response => this.messages = response.data.data)
     }
   },
   provide() {
