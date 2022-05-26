@@ -101,6 +101,33 @@ export default {
   cursor: pointer;
 }
 
+.button:disabled {
+  border-radius: 5px;
+  margin: 0;
+  background-color: transparent;
+  border: none;
+  color: rgb(147, 147, 149);
+  outline: 1px solid rgb(147, 147, 149);
+  width: 100%;
+  height: 40px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 12pt;
+}
+
+.button:disabled:hover {
+  cursor: default;
+  border-radius: 5px;
+  color: rgb(147, 147, 149);
+  margin: 0;
+  background-color: transparent;
+  border: none;
+  outline: 1px solid rgb(147, 147, 149);
+  width: 100%;
+  height: 40px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 12pt;
+}
+
 .button-gray {
   border-radius: 5px;
   margin: 0;
