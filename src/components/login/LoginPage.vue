@@ -1,28 +1,76 @@
 <template>
-  <div class="full-height">
+  <the-centered-flex v-if="localStorageHandler.isAuthenticated()">
+    <label>Hello {{userHandler.getCurrentUserInfo().name}}! You are already authenticated. Please, head to </label>
+    <label>
+      <router-link to="/chat">chat</router-link>
+    </label>
+    <label>or you can</label>
+    <button @click="logout">Log out</button>
+  </the-centered-flex>
+  <div v-else class="full-height">
     <the-centered-flex>
       <div class="container-login">
         <label for="">Login</label>
         <input ref="login" class="input" type="text" />
         <label for="">Password</label>
         <input ref="password" type="password" class="input" />
-        <button @click="login($refs.login.value, $refs.password.value)" class="button">Login</button>
+        <button v-if="isLoggingIn" disabled @click="login($refs.login.value, $refs.password.value)" class="button">Please wait...</button>
+        <button v-else @click="login($refs.login.value, $refs.password.value)" class="button">Login</button>
+        <error-card v-show="invalidCredentials">Invalid credentials</error-card>
       </div>
     </the-centered-flex>
   </div>
 </template>
 
 <script>
+import ErrorCard from "../shared/ErrorCard.vue"
 import TheCenteredFlex from "../shared/TheCenteredFlex.vue"
 import axios from "axios"
+import LocalStorageHandler from "../../handlers/LocalStorageHandler"
+import UserHandler from "../../handlers/UserHandler"
 
 export default {
   inject: ['setCurrentUser', 'currentUser'],
-  components: { TheCenteredFlex },
+  components: { TheCenteredFlex, ErrorCard },
+  data() {
+    return {
+      isLoggingIn: false,
+      invalidCredentials: false,
+      localStorageHandler: new LocalStorageHandler(),
+      userHandler: new UserHandler()
+    }
+  },
+  mounted() {
+    
+  },
   methods: {
     login(login, password) {
-      axios.post("https://localhost:5001/api/v1/auth/login", { login: login, password: password })
-        .then(response => { console.log(response); document.cookie = "jwt=" + response.data.acess_Token; this.$router.push("/chat") })
+      const model = { 
+        login: login, 
+        password: password 
+      }
+
+      this.isLoggingIn = true
+
+      axios.post("https://localhost:5001/api/v1/auth/login", model)
+        .then(response => {
+          this.isLoggingIn = false
+
+          if (response.data.message == 'Error') {
+            this.invalidCredentials = true
+            
+            return
+          }
+          
+          localStorage.setItem("jwt", response.data.accessToken) 
+          
+          this.$router.push("/chat") 
+        }
+      )
+    },
+    logout() {
+      this.localStorageHandler.unAuthenticate()
+      this.$forceUpdate()
     }
   }
 }
